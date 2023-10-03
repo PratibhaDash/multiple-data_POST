@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Images</title>
+</head>
+<body>
+    <h1>Upload Multiple Images</h1>
+    
+    <form id="imageUploadForm" enctype="multipart/form-data">
+        <input type="text" name="name" placeholder="Enter a name"><br>
+        <input type="file" name="image" multiple><br>
+        <button type="submit">Upload Images</button>
+    </form>
+    
+    <div id="message"></div>
+    
+    <script>
+        document.getElementById("imageUploadForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            var formData = new FormData(this);
+            
+            fetch("/api/mymodels/", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                var messageDiv = document.getElementById("message");
+                messageDiv.innerHTML = "Images uploaded successfully!";
+                this.reset();
+            })
+            .catch(error => {
+                var messageDiv = document.getElementById("message");
+                messageDiv.innerHTML = "Error uploading images: " + error;
+            });
+        });
+    </script>
+</body>
+</html>
